@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Invitacion de boda de Diego y Silvia - 12 de junio de 2027">
+  <meta name="theme-color" content="#EDE5D8">
+  <title>Diego & Silvia - Nos casamos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/jpeg" href="/images/logo.jpeg">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body>
+  <div class="page-shell">
+    <div class="page-shell__wash" aria-hidden="true"></div>
+
+    <div class="floating-ui">
+      <button class="floating-ui__button" id="musicToggle" type="button" aria-label="Activar musica">
+        <span class="floating-ui__icon" aria-hidden="true">♪</span>
+        <span class="floating-ui__label">Musica</span>
+      </button>
+    </div>
+
+    <div class="floating-nav" aria-label="Navegacion vertical">
+      <button class="floating-nav__button" id="navUp" type="button" aria-label="Subir">
+        <span aria-hidden="true">↑</span>
+      </button>
+      <button class="floating-nav__button" id="navDown" type="button" aria-label="Bajar">
+        <span aria-hidden="true">↓</span>
+      </button>
+    </div>
+
+    <section class="hero-scene" id="heroScene">
+      <div class="hero-stage">
+        <button class="hero-stage__intro-media" id="heroIntroTrigger" type="button" aria-label="Abrir invitacion">
+          <video class="hero-stage__intro-video" id="heroIntroVideo" playsinline preload="auto">
+            <source src="/images/hero-intro.mp4" type="video/mp4">
+          </video>
+          <div class="hero-stage__overlay hero-stage__overlay--intro"></div>
+        </button>
+
+        <button class="scroll-indicator hidden" id="scrollHint" type="button" aria-label="Desplazarse hacia abajo">
+          <span class="scroll-indicator__mouse" aria-hidden="true">
+            <span class="scroll-indicator__wheel"></span>
+          </span>
+          <span class="scroll-indicator__text">Reproduce el video para abrir</span>
+        </button>
+      </div>
+    </section>
+
+    <main class="site-main" id="invitationContent">
+      <section class="section reveal reveal--up">
+        <div class="card card--sage countdown-card">
+          <p class="section-tag">Cuenta atras</p>
+          <h2 class="section-title">El gran dia esta cada vez mas cerca</h2>
+          <div class="countdown" aria-live="polite">
+            <div class="countdown__item">
+              <span class="countdown__value" id="countdownDays">000</span>
+              <span class="countdown__label">Dias</span>
+            </div>
+            <div class="countdown__item">
+              <span class="countdown__value" id="countdownHours">00</span>
+              <span class="countdown__label">Horas</span>
+            </div>
+            <div class="countdown__item">
+              <span class="countdown__value" id="countdownMinutes">00</span>
+              <span class="countdown__label">Min</span>
+            </div>
+            <div class="countdown__item">
+              <span class="countdown__value" id="countdownSeconds">00</span>
+              <span class="countdown__label">Sec</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section story-section reveal reveal--up" id="nuestra-historia">
+        <div class="story-section__copy">
+          <p class="section-tag">Nuestra historia</p>
+          <p class="story-section__lead">
+            <span class="story-section__dropcap">L</span>
+            o que comenzo como una historia tranquila, llena de complicidad, miradas largas y conversaciones
+            interminables, hoy se convierte en la celebracion mas importante de nuestra vida. Queremos compartir este
+            dia con quienes han formado parte de nuestro camino y seguir escribiendo juntos un recuerdo inolvidable.
+          </p>
+
+          <div class="venue-list">
+            <a class="venue-info"
+              href="https://www.google.com/maps/search/?api=1&query=Iglesia+de+San+Jeronimo+el+Real+Madrid"
+              target="_blank" rel="noreferrer" aria-label="Abrir ubicacion de la ceremonia en Google Maps">
+              <div class="venue-info__pin" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path d="M12 21c4.2-4.8 6.3-8.3 6.3-10.7A6.3 6.3 0 1 0 5.7 10.3C5.7 12.7 7.8 16.2 12 21Z" fill="none"
+                    stroke="currentColor" stroke-width="1.7" />
+                  <circle cx="12" cy="10.2" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7" />
+                </svg>
+              </div>
+              <div>
+                <p class="venue-info__eyebrow">Ceremonia</p>
+                <p class="venue-info__name">Iglesia de San Jeronimo el Real</p>
+                <p class="venue-info__address">Madrid, Espana</p>
+              </div>
+            </a>
+
+            <a class="venue-info" href="https://www.google.com/maps/search/?api=1&query=Finca+Villa+Laureana+Madrid"
+              target="_blank" rel="noreferrer" aria-label="Abrir ubicacion de la finca en Google Maps">
+              <div class="venue-info__pin" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="presentation">
+                  <path d="M12 21c4.2-4.8 6.3-8.3 6.3-10.7A6.3 6.3 0 1 0 5.7 10.3C5.7 12.7 7.8 16.2 12 21Z" fill="none"
+                    stroke="currentColor" stroke-width="1.7" />
+                  <circle cx="12" cy="10.2" r="2.4" fill="none" stroke="currentColor" stroke-width="1.7" />
+                </svg>
+              </div>
+              <div>
+                <p class="venue-info__eyebrow">Celebracion</p>
+                <p class="venue-info__name">Finca Villa Laureana</p>
+                <p class="venue-info__address">Madrid, Espana</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="story-section__art">
+          <img src="/images/foto inicio.jpeg" alt="Ilustracion en acuarela de la Iglesia de San Jeronimo el Real">
+        </div>
+      </section>
+
+      <section class="section reveal reveal--up" id="programa">
+        <div class="section-heading">
+          <p class="section-tag">Programa del dia</p>
+          <h2 class="section-title">Cada momento pensado para celebrarlo juntos</h2>
+        </div>
+
+        <div class="timeline">
+          <article class="timeline__item">
+            <div class="timeline__marker"></div>
+            <div class="timeline__content timeline__content--simple">
+              <div class="timeline__time">16:30</div>
+              <div class="timeline__emoji" aria-hidden="true">💒</div>
+              <div>
+                <h3>Llegada de los invitados a la Iglesia</h3>
+              </div>
+            </div>
+          </article>
+
+          <article class="timeline__item">
+            <div class="timeline__marker"></div>
+            <div class="timeline__content timeline__content--simple">
+              <div class="timeline__time">17:00</div>
+              <div class="timeline__emoji" aria-hidden="true">🙏</div>
+              <div>
+                <h3>Ceremonia religiosa</h3>
+              </div>
+            </div>
+          </article>
+
+          <article class="timeline__item">
+            <div class="timeline__marker"></div>
+            <div class="timeline__content timeline__content--simple">
+              <div class="timeline__time">19:30</div>
+              <div class="timeline__emoji" aria-hidden="true">🥂</div>
+              <div>
+                <h3>Coctel</h3>
+              </div>
+            </div>
+          </article>
+
+          <article class="timeline__item">
+            <div class="timeline__marker"></div>
+            <div class="timeline__content timeline__content--simple">
+              <div class="timeline__time">21:00</div>
+              <div class="timeline__emoji" aria-hidden="true">🍽️</div>
+              <div>
+                <h3>Banquete</h3>
+              </div>
+            </div>
+          </article>
+
+          <article class="timeline__item">
+            <div class="timeline__marker"></div>
+            <div class="timeline__content timeline__content--simple">
+              <div class="timeline__time">23:00</div>
+              <div class="timeline__emoji" aria-hidden="true">🎉</div>
+              <div>
+                <h3>Fiesta</h3>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section dress-section reveal reveal--up" id="codigo-vestimenta">
+        <div class="dress-section__copy">
+          <p class="section-tag">Codigo de vestimenta</p>
+          <h2 class="section-title">Elegancia en tonos suaves</h2>
+          <p>Nos encantara veros con un estilo elegante y cuidado. Recomendamos trajes claros o medios, vestidos fluidos
+            y tejidos con movimiento para acompanar el ambiente de la celebracion.</p>
+          <ul class="rules-list">
+            <li>Estilo formal o coctel elegante para todo el dia.</li>
+            <li>Mejor evitar blanco, marfil y tonos muy cercanos al vestido de novia.</li>
+            <li><strong>Esta prohibido llevar el color naranja.</strong></li>
+            <li>Zapatos comodos para poder disfrutar de la fiesta hasta el final.</li>
+          </ul>
+        </div>
+
+        <div class="dress-section__placeholder" aria-label="Imagen del codigo de vestimenta pendiente">
+          <p class="dress-section__placeholder-tag">Referencia visual</p>
+          <p class="dress-section__placeholder-text">Cuando me pases la nueva foto la coloco aqui.</p>
+        </div>
+      </section>
+
+      <section class="section reveal reveal--up" id="alojamiento">
+        <div class="card card--sage lodging-form-card">
+          <p class="section-tag">Alojamiento</p>
+          <h2 class="section-title">Necesitas alojamiento para la boda?</h2>
+          <form class="lodging-form" id="lodgingForm" novalidate>
+            <fieldset class="choice-group choice-group--compact">
+              <legend>Quieres recibir un codigo provisional de descuento? *</legend>
+              <div class="choice-grid choice-grid--2">
+                <label class="choice-card">
+                  <input type="radio" name="lodgingNeeded" value="si">
+                  <span>Si</span>
+                </label>
+                <label class="choice-card">
+                  <input type="radio" name="lodgingNeeded" value="no">
+                  <span>No</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="lodging-code hidden" id="lodgingCodePanel">
+              <p class="lodging-code__label">Codigo provisional</p>
+              <p class="lodging-code__value" id="lodgingCodeValue">HOTEL-DS27</p>
+              <p class="lodging-code__note">Lo usaremos como referencia temporal hasta cerrar el acuerdo definitivo con
+                el hotel.</p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="section reveal reveal--up" id="confirmar">
+        <div class="rsvp-card">
+          <p class="section-tag">Confirmar asistencia</p>
+          <h2 class="section-title">Nos hara muchisima ilusion contar contigo</h2>
+
+          <form class="rsvp-form" id="rsvpForm" novalidate>
+            <div class="form-field">
+              <label for="fullName">Nombre completo *</label>
+              <input id="fullName" name="fullName" type="text" maxlength="100" autocomplete="name"
+                placeholder="Tu nombre y apellidos" required>
+            </div>
+
+            <fieldset class="choice-group">
+              <legend>Confirmacion de asistencia *</legend>
+              <div class="choice-grid choice-grid--2">
+                <label class="choice-card">
+                  <input type="radio" name="attendance" value="si">
+                  <span>Si, asistire</span>
+                </label>
+                <label class="choice-card">
+                  <input type="radio" name="attendance" value="no">
+                  <span>No podre asistir</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="form-field is-collapsed" id="dietaryGroup">
+              <label for="dietaryNotes">Restricciones alimentarias o alergias</label>
+              <textarea id="dietaryNotes" name="dietaryNotes" rows="3" maxlength="300"
+                placeholder="Cuentanos si hay algo que debamos tener en cuenta"></textarea>
+            </div>
+
+            <fieldset class="choice-group is-collapsed" id="plusOneGroup">
+              <legend>Tienes acompanante? *</legend>
+              <div class="choice-grid choice-grid--2">
+                <label class="choice-card">
+                  <input type="radio" name="plusOne" value="si">
+                  <span>Si</span>
+                </label>
+                <label class="choice-card">
+                  <input type="radio" name="plusOne" value="no">
+                  <span>No</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="form-field is-collapsed" id="plusOneCountGroup">
+              <label for="plusOneCount">Cuantos acompanantes vienen contigo? *</label>
+              <select id="plusOneCount" name="plusOneCount">
+                <option value="">Selecciona una cantidad</option>
+                <option value="1">1 acompanante</option>
+                <option value="2">2 acompanantes</option>
+                <option value="3">3 acompanantes</option>
+                <option value="4">4 acompanantes</option>
+                <option value="5">5 acompanantes</option>
+                <option value="6">6 acompanantes</option>
+                <option value="7">7 acompanantes</option>
+                <option value="8">8 acompanantes</option>
+                <option value="9">9 acompanantes</option>
+                <option value="10">10 acompanantes</option>
+              </select>
+            </div>
+
+            <fieldset class="choice-group is-collapsed" id="childrenGroup">
+              <legend>Asistiran ninos menores de 12 anos? *</legend>
+              <div class="choice-grid choice-grid--2">
+                <label class="choice-card">
+                  <input type="radio" name="children" value="si">
+                  <span>Si</span>
+                </label>
+                <label class="choice-card">
+                  <input type="radio" name="children" value="no">
+                  <span>No</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="form-field is-collapsed" id="childrenCountGroup">
+              <label for="childrenCount">Cuantos ninos menores de 12 anos asistiran? *</label>
+              <select id="childrenCount" name="childrenCount">
+                <option value="">Selecciona una cantidad</option>
+                <option value="1">1 nino</option>
+                <option value="2">2 ninos</option>
+                <option value="3">3 ninos</option>
+                <option value="4">4 ninos</option>
+                <option value="5">5 ninos</option>
+              </select>
+            </div>
+
+            <fieldset class="choice-group is-collapsed" id="shuttleGroup">
+              <legend>Que trayectos de bus necesitas?</legend>
+              <div class="choice-grid">
+                <label class="choice-card choice-card--checkbox">
+                  <input type="checkbox" name="shuttleRoutes" value="hotel_iglesia">
+                  <span>Hotel - Iglesia</span>
+                </label>
+                <label class="choice-card choice-card--checkbox">
+                  <input type="checkbox" name="shuttleRoutes" value="iglesia_finca">
+                  <span>Iglesia - Finca</span>
+                </label>
+                <label class="choice-card choice-card--checkbox">
+                  <input type="checkbox" name="shuttleRoutes" value="finca_hotel">
+                  <span>Finca - Hotel</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <button class="button button--primary" id="submitBtn" type="submit">Confirmar asistencia</button>
+          </form>
+
+          <div class="rsvp-feedback rsvp-feedback--success hidden" id="rsvpSuccess">
+            <h3>Gracias por confirmarlo</h3>
+            <p>Hemos recibido tu respuesta y estamos felices de contar contigo.</p>
+          </div>
+
+          <div class="rsvp-feedback rsvp-feedback--error hidden" id="rsvpError">
+            <p id="rsvpErrorText">Ha ocurrido un error. Intentalo de nuevo.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reveal reveal--up">
+        <div class="card card--sage final-card">
+          <p class="section-tag">Save the date</p>
+          <h2 class="section-title">12 de junio de 2027</h2>
+          <button class="button button--secondary" id="calendarBtn" type="button">Anadir al calendario</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <img src="/images/logo.jpeg" alt="Logo Diego y Silvia" class="site-footer__logo">
+      <p>Diego & Silvia · Madrid · 2027</p>
+    </footer>
+  </div>
+
+  <script type="module" src="/js/site.js"></script>
+</body>
+
+</html>

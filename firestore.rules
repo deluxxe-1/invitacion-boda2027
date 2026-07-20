@@ -1,0 +1,53 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: rsvps
+// Document ID: auto-generated
+// Fields:
+//   - name: string (required, 1-100 chars)
+//   - email: string (optional, max 150 chars)
+//   - phone: string (optional, max 20 chars)
+//   - attendance: string (required, one of: ceremonia, ceremonia_y_celebracion, no_asiste)
+//   - guestCount: number (required, 0-5)
+//   - dietaryNotes: string (optional, max 300 chars)
+//   - message: string (optional, max 500 chars)
+//   - createdAt: timestamp (required on create)
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidOptionalString(field, maxLen) {
+      return !(field in request.resource.data) ||
+        (request.resource.data[field] is string &&
+         request.resource.data[field].size() <= maxLen);
+    }
+
+    function isValidRsvp(data) {
+      return data.keys().hasAll(['name', 'attendance', 'guestCount', 'createdAt']) &&
+        data.keys().hasOnly(['name', 'email', 'phone', 'attendance', 'guestCount', 'dietaryNotes', 'message', 'createdAt']) &&
+        data.name is string &&
+        data.name.size() >= 1 &&
+        data.name.size() <= 100 &&
+        isValidOptionalString('email', 150) &&
+        isValidOptionalString('phone', 20) &&
+        data.attendance is string &&
+        data.attendance in ['ceremonia', 'ceremonia_y_celebracion', 'no_asiste'] &&
+        data.guestCount is number &&
+        data.guestCount >= 0 &&
+        data.guestCount <= 5 &&
+        isValidOptionalString('dietaryNotes', 300) &&
+        isValidOptionalString('message', 500) &&
+        data.createdAt == request.time;
+    }
+
+    match /rsvps/{rsvpId} {
+      allow create: if isValidRsvp(request.resource.data);
+      allow read, update, delete: if false;
+    }
+  }
+}
