@@ -11,12 +11,13 @@
  */
 
 export const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROJECT_ID.firebaseapp.com",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID",
+  apiKey: "AIzaSyAvwrCpTKTwXoDl2VkjzYX6vtcs_PWKQU4",
+  authDomain: "boda-2027.firebaseapp.com",
+  projectId: "boda-2027",
+  storageBucket: "boda-2027.firebasestorage.app",
+  messagingSenderId: "2745893545",
+  appId: "1:2745893545:web:8f7d62bddc4b0defa4dfb8",
+  measurementId: "G-DCMYNQGMQ7",
 };
 
 export const isFirebaseConfigured = () =>
