@@ -1,12 +1,12 @@
 :root {
-  --bg: #f7f1e7;
-  --bg-deep: #ede5d8;
-  --bg-soft: #fbf7f0;
+  --bg: #ffffff;
+  --bg-deep: #ffffff;
+  --bg-soft: #ffffff;
   --sage: #b7ccb2;
   --sage-deep: #6f8971;
   --sage-soft: rgba(183, 204, 178, 0.22);
-  --paper: #fffdf9;
-  --paper-strong: #fffaf4;
+  --paper: #ffffff;
+  --paper-strong: #ffffff;
   --text: #334133;
   --text-soft: #5e6d60;
   --line: rgba(51, 65, 51, 0.12);
@@ -18,8 +18,9 @@
   --radius-lg: 24px;
   --radius-md: 18px;
   --radius-sm: 12px;
-  --font-serif: "Playfair Display", Georgia, serif;
-  --font-sans: "Inter", Arial, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-script: "Luxurious Script", "Instrument Serif", Georgia, serif;
+  --font-sans: "Noto Sans", Arial, sans-serif;
 }
 
 *,
@@ -40,9 +41,7 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   color: var(--text);
-  background:
-    radial-gradient(circle at top, rgba(255, 255, 255, 0.8), transparent 40%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+  background: #ffffff;
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -71,15 +70,7 @@ select {
 }
 
 .page-shell__wash {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 15% 12%, rgba(183, 204, 178, 0.16), transparent 20%),
-    radial-gradient(circle at 85% 30%, rgba(212, 194, 167, 0.16), transparent 22%),
-    radial-gradient(circle at 50% 100%, rgba(183, 204, 178, 0.12), transparent 24%);
-  opacity: 0.85;
-  z-index: 0;
+  display: none;
 }
 
 /* ---------- Floating UI & Nav ---------- */
@@ -92,6 +83,13 @@ select {
 
 body.intro-pending .floating-ui,
 body.intro-pending .floating-nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+body.photo-intro-active .floating-ui,
+body.photo-intro-active .floating-nav {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -157,82 +155,85 @@ body.intro-pending .floating-nav {
   font-size: 1rem;
 }
 
-/* ---------- HERO: Video Intro at bottom ---------- */
+/* ---------- HERO: Fullscreen Video Intro ---------- */
 .hero-scene {
-  position: relative;
-  z-index: 20;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
   align-items: center;
-  padding: 0;
-  overflow: hidden;
-  transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+  justify-content: center;
+  background: #ffffff;
 }
 
 .hero-scene.is-hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  position: absolute;
-  height: 0;
-  min-height: 0;
-  overflow: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
 }
 
 .hero-stage {
   position: relative;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1;
+  height: 100%;
 }
 
 .hero-stage__intro-media {
-  position: relative;
+  position: absolute;
+  inset: 0;
   display: block;
-  width: min(92vw, 420px);
+  width: 100%;
+  height: 100%;
   border: none;
   padding: 0;
-  margin-bottom: 32px;
+  margin: 0;
   cursor: pointer;
   background: transparent;
   appearance: none;
   -webkit-appearance: none;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
-  transition: transform 0.3s ease;
-}
-
-.hero-stage__intro-media:hover {
-  transform: translateY(-4px);
 }
 
 .hero-stage__intro-media:focus-visible {
-  outline: 3px solid var(--sage);
-  outline-offset: 3px;
+  outline: none;
 }
 
 .hero-stage__intro-video {
-  width: 100%;
-  display: block;
-  aspect-ratio: 9 / 16;
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   object-fit: cover;
-  background: var(--bg-deep);
-  border-radius: 20px;
+  object-position: center;
+  display: block;
+  background: #ffffff;
+}
+
+.hero-stage__intro-media:not(.is-playing) .hero-stage__intro-video {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hero-stage__intro-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .hero-stage__overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border-radius: 20px;
 }
 
 .hero-stage__overlay--intro {
@@ -248,24 +249,23 @@ body.intro-pending .floating-nav {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  padding: 30px 16px 24px;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.45) 100%);
+  padding: 40px 20px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.5) 100%);
   color: #fffdf9;
   pointer-events: none;
-  border-radius: 0 0 20px 20px;
 }
 
 .hero-stage__play-badge {
-  width: 62px;
-  height: 62px;
+  width: 68px;
+  height: 68px;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(255, 253, 249, 0.2);
+  background: rgba(255, 253, 249, 0.18);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 253, 249, 0.35);
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   padding-left: 4px;
   animation: playPulse 2s ease-in-out infinite;
 }
@@ -276,7 +276,7 @@ body.intro-pending .floating-nav {
 }
 
 .hero-stage__play-text {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -288,6 +288,11 @@ body.intro-pending .floating-nav {
   cursor: default;
 }
 
+.hero-stage__intro-media.is-playing .hero-stage__intro-photo {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .hero-stage__intro-media.is-playing .hero-stage__play {
   opacity: 0;
   transition: opacity 0.4s ease;
@@ -295,6 +300,59 @@ body.intro-pending .floating-nav {
 
 .hero-stage__intro-media.is-playing .hero-stage__overlay {
   opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Warm golden-cream overlay for video transition */
+.hero-stage__transition-video {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: #ffffff;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.hero-stage__transition-video.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Invitation content reveal animation */
+.site-main.intro-reveal {
+  animation: invitationReveal 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes invitationReveal {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Reduced motion fallback */
+@media (prefers-reduced-motion: reduce) {
+  .hero-stage__whiteout {
+    transition-duration: 0.01ms !important;
+  }
+  .hero-stage__whiteout.is-fading-out {
+    transition-duration: 0.01ms !important;
+  }
+  .site-main.intro-reveal {
+    animation-duration: 0.01ms !important;
+  }
+  .hero-scene.is-hidden {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .scroll-indicator {
@@ -375,7 +433,7 @@ body.intro-pending .floating-nav {
   width: 100%;
   max-width: 100%;
   transform: translateX(-50%);
-  background: linear-gradient(180deg, rgba(251, 247, 240, 1) 0%, rgba(237, 229, 216, 1) 100%);
+  background: #ffffff;
   z-index: -1;
 }
 
@@ -384,7 +442,7 @@ body.intro-pending .floating-nav {
 }
 
 .section-heading {
-  max-width: 720px;
+  max-width: 860px;
   margin: 0 auto 30px;
   text-align: center;
 }
@@ -400,6 +458,7 @@ body.intro-pending .floating-nav {
 .section-title {
   margin: 0;
   font-family: var(--font-serif);
+  font-weight: 400;
   font-size: clamp(1.8rem, 4vw, 3rem);
   line-height: 1.08;
   word-wrap: break-word;
@@ -424,6 +483,78 @@ body.intro-pending .floating-nav {
   padding: 34px;
 }
 
+.story-card,
+.venue-card {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.photo-intro-screen {
+  position: relative;
+  display: grid;
+  min-height: 100vh;
+  min-height: 100dvh;
+  min-height: 100svh;
+  height: 100vh;
+  height: 100dvh;
+  height: 100svh;
+  width: 100%;
+  overflow: hidden;
+  background: #e6dccd;
+}
+
+.photo-intro-screen__media,
+.photo-intro-screen picture,
+.photo-intro-screen img {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-intro-screen__media {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.photo-intro-screen img {
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.photo-intro-screen__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.photo-intro-screen__headline,
+.photo-intro-screen__names {
+  position: absolute;
+  left: 50%;
+  width: min(88vw, 760px);
+  margin: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #5f5141;
+  font-family: var(--font-script);
+  font-weight: 400;
+  line-height: 0.92;
+  text-wrap: balance;
+  text-shadow: 0 4px 18px rgba(255, 250, 240, 0.48);
+}
+
+.photo-intro-screen__headline {
+  top: max(44px, 7svh);
+  font-size: clamp(4rem, 13vw, 7rem);
+}
+
+.photo-intro-screen__names {
+  top: 28%;
+  font-size: clamp(4.6rem, 14.5vw, 7.8rem);
+}
+
 .card--sage {
   background:
     linear-gradient(180deg, rgba(183, 204, 178, 0.34), rgba(183, 204, 178, 0.14)),
@@ -433,6 +564,14 @@ body.intro-pending .floating-nav {
 /* ---------- Countdown ---------- */
 .countdown-card {
   text-align: center;
+}
+
+.countdown-card__date {
+  margin: 12px 0 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--text);
 }
 
 .countdown {
@@ -467,11 +606,8 @@ body.intro-pending .floating-nav {
 /* ---------- Story Section ---------- */
 .story-section,
 .dress-section {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 28px;
+  display: block;
   padding: 34px;
-  align-items: center;
 }
 
 .story-section__lead,
@@ -538,6 +674,7 @@ body.intro-pending .floating-nav {
 .venue-info__name {
   margin: 0 0 4px;
   font-family: var(--font-serif);
+  font-weight: 600;
   font-size: clamp(1rem, 2.5vw, 1.35rem);
   color: var(--text);
 }
@@ -555,43 +692,6 @@ body.intro-pending .floating-nav {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--sage-deep);
-}
-
-.story-section__art,
-.dress-section__art {
-  overflow: hidden;
-  border-radius: 26px;
-  box-shadow: var(--shadow-soft);
-}
-
-.dress-section__placeholder {
-  min-height: 100%;
-  display: grid;
-  place-items: center;
-  padding: 32px;
-  border-radius: 26px;
-  background:
-    linear-gradient(180deg, rgba(183, 204, 178, 0.18), rgba(255, 253, 249, 0.82)),
-    rgba(255, 253, 249, 0.9);
-  border: 1px dashed rgba(111, 137, 113, 0.28);
-  text-align: center;
-}
-
-.dress-section__placeholder-tag {
-  margin: 0 0 10px;
-  font-size: 0.8rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--sage-deep);
-}
-
-.dress-section__placeholder-text {
-  margin: 0;
-  max-width: 22ch;
-  font-family: var(--font-serif);
-  font-size: clamp(1.2rem, 3vw, 2rem);
-  color: var(--text);
-  line-height: 1.2;
 }
 
 /* ---------- Timeline ---------- */
@@ -644,6 +744,7 @@ body.intro-pending .floating-nav {
 
 .timeline__content--simple h3 {
   margin: 0;
+  font-weight: 400;
   font-size: clamp(0.95rem, 2.5vw, 1.35rem);
 }
 
@@ -676,6 +777,7 @@ body.intro-pending .floating-nav {
 .timeline__content h3 {
   margin: 0 0 6px;
   font-family: var(--font-serif);
+  font-weight: 400;
   font-size: clamp(1rem, 2.5vw, 1.35rem);
 }
 
@@ -697,8 +799,15 @@ body.intro-pending .floating-nav {
   color: var(--sage-deep);
 }
 
-.lodging-form-card {
-  max-width: 760px;
+.countdown-card,
+.story-card,
+.venue-card,
+.timeline,
+.dress-section,
+.lodging-form-card,
+.rsvp-card,
+.final-card {
+  max-width: 860px;
   margin: 0 auto;
 }
 
@@ -735,6 +844,10 @@ body.intro-pending .floating-nav {
   margin: 10px 0 0;
   color: var(--text-soft);
   line-height: 1.7;
+}
+
+.dress-section__copy > .section-title + .rules-list {
+  margin-top: 18px;
 }
 
 /* ---------- RSVP ---------- */
@@ -875,6 +988,53 @@ body.intro-pending .floating-nav {
     transform 0.3s ease,
     margin 0.3s ease,
     padding 0.3s ease;
+}
+
+.conditional-panel__title {
+  margin: 0 0 16px;
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.dynamic-list {
+  display: grid;
+  gap: 16px;
+}
+
+.detail-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(37, 35, 33, 0.08);
+}
+
+.detail-card__title {
+  margin: 0 0 14px;
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.detail-card .form-field {
+  margin-bottom: 14px;
+}
+
+.detail-card .form-field:last-of-type {
+  margin-bottom: 0;
+}
+
+.detail-card__options {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.detail-card__options .choice-card span {
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .form-field,
@@ -1042,6 +1202,29 @@ body.intro-pending .floating-nav {
    RESPONSIVE — Mobile large (<=720px)
    ========================================================== */
 @media (max-width: 720px) {
+  .hero-scene,
+  .hero-stage,
+  .hero-stage__intro-media {
+    background: #f3ede7;
+  }
+
+  .hero-stage__intro-media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-stage__intro-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 82%;
+    transform: scale(1);
+    transform-origin: center center;
+    background: #f3ede7;
+  }
+
   .floating-ui {
     top: auto;
     bottom: calc(18px + env(safe-area-inset-bottom, 0px));
@@ -1102,6 +1285,12 @@ body.intro-pending .floating-nav {
     border-radius: 24px;
   }
 
+  .photo-intro-screen,
+  .photo-intro-screen__media {
+    min-height: 100svh;
+    height: 100svh;
+  }
+
   .timeline__content {
     grid-template-columns: auto auto 1fr;
     gap: 10px;
@@ -1128,6 +1317,12 @@ body.intro-pending .floating-nav {
    RESPONSIVE — Mobile (<=560px)
    ========================================================== */
 @media (max-width: 560px) {
+  .hero-stage__intro-video {
+    object-fit: cover;
+    object-position: center 86%;
+    transform: scale(1.08);
+  }
+
   .site-main {
     padding: 20px 14px 136px;
   }
@@ -1171,6 +1366,12 @@ body.intro-pending .floating-nav {
   .rsvp-card {
     padding: 20px 16px;
     border-radius: 22px;
+  }
+
+  .photo-intro-screen,
+  .photo-intro-screen__media {
+    min-height: 100svh;
+    height: 100svh;
   }
 
   .story-section__dropcap {

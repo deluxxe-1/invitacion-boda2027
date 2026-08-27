@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Invitacion de boda de Diego y Silvia - 12 de junio de 2027">
+  <meta name="description" content="Invitación a la boda - 12 de junio de 2027">
   <meta name="theme-color" content="#EDE5D8">
-  <title>Diego & Silvia - Nos casamos</title>
+  <title>Invitación a la boda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Luxurious+Script&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet">
-  <link rel="icon" type="image/jpeg" href="/images/logo.jpeg">
+  <link rel="icon" type="image/png" href="/images/favicon.png?v=20260728-2">
   <link rel="stylesheet" href="/css/site.css">
 </head>
 
@@ -39,26 +39,51 @@
     <section class="hero-scene" id="heroScene">
       <div class="hero-stage">
         <button class="hero-stage__intro-media" id="heroIntroTrigger" type="button" aria-label="Abrir invitacion">
-          <video class="hero-stage__intro-video" id="heroIntroVideo" playsinline preload="auto">
-            <source src="/images/hero-intro.mp4" type="video/mp4">
+          <img
+            class="hero-stage__intro-photo"
+            id="heroIntroPhoto"
+            src="/images/hero-intro-poster.jpeg"
+            alt="Sobre inicial de la invitacion"
+            aria-hidden="true">
+          <video
+            class="hero-stage__intro-video"
+            id="heroIntroVideo"
+            playsinline
+            webkit-playsinline
+            preload="metadata"
+            muted
+            poster="/images/hero-intro-poster.jpeg">
+            <source media="(max-width: 720px)" src="/images/video%20movil.mp4" type="video/mp4">
+            <source src="/images/video%20ordenador.mp4" type="video/mp4">
           </video>
-          <div class="hero-stage__overlay hero-stage__overlay--intro"></div>
         </button>
 
-        <button class="scroll-indicator hidden" id="scrollHint" type="button" aria-label="Desplazarse hacia abajo">
-          <span class="scroll-indicator__mouse" aria-hidden="true">
-            <span class="scroll-indicator__wheel"></span>
-          </span>
-          <span class="scroll-indicator__text">Reproduce el video para abrir</span>
-        </button>
+        <video class="hero-stage__transition-video" id="heroTransitionVideo" playsinline preload="auto" muted aria-hidden="true">
+          <source src="/images/transicion.mp4" type="video/mp4">
+        </video>
       </div>
     </section>
 
-    <main class="site-main" id="invitationContent">
+    <section class="photo-intro-screen" id="invitationContent">
+      <div class="photo-intro-screen__media">
+        <picture>
+          <source media="(max-width: 720px)" srcset="/images/version%20movil.png">
+          <img src="/images/foto inicio.jpeg" alt="Imagen principal de Diego y Silvia">
+        </picture>
+      </div>
+      <div class="photo-intro-screen__overlay" aria-hidden="true">
+        <p class="photo-intro-screen__headline">¡Nos Casamos!</p>
+        <p class="photo-intro-screen__names">Diego &amp; Silvia</p>
+      </div>
+    </section>
+
+    <main class="site-main">
+
       <section class="section reveal reveal--up">
         <div class="card card--sage countdown-card">
           <p class="section-tag">Cuenta atras</p>
           <h2 class="section-title">El gran dia esta cada vez mas cerca</h2>
+          <p class="countdown-card__date">12 de junio de 2027</p>
           <div class="countdown" aria-live="polite">
             <div class="countdown__item">
               <span class="countdown__value" id="countdownDays">000</span>
@@ -80,16 +105,20 @@
         </div>
       </section>
 
-      <section class="section story-section reveal reveal--up" id="nuestra-historia">
-        <div class="story-section__copy">
+      <section class="section reveal reveal--up" id="nuestra-historia">
+        <div class="card story-card">
           <p class="section-tag">Nuestra historia</p>
           <p class="story-section__lead">
-            <span class="story-section__dropcap">L</span>
-            o que comenzo como una historia tranquila, llena de complicidad, miradas largas y conversaciones
-            interminables, hoy se convierte en la celebracion mas importante de nuestra vida. Queremos compartir este
-            dia con quienes han formado parte de nuestro camino y seguir escribiendo juntos un recuerdo inolvidable.
+            <span class="story-section__dropcap">L</span>o que empezó como una locura, se ha convertido en lo mejor de
+            nuestra vida.
           </p>
+        </div>
+      </section>
 
+      <section class="section reveal reveal--up" id="lugares">
+        <div class="card card--sage venue-card">
+          <p class="section-tag">Ceremonia y celebracion</p>
+          <h2 class="section-title">Los lugares de un dia inolvidable</h2>
           <div class="venue-list">
             <a class="venue-info"
               href="https://www.google.com/maps/search/?api=1&query=Iglesia+de+San+Jeronimo+el+Real+Madrid"
@@ -119,15 +148,11 @@
               </div>
               <div>
                 <p class="venue-info__eyebrow">Celebracion</p>
-                <p class="venue-info__name">Finca Villa Laureana</p>
-                <p class="venue-info__address">Madrid, Espana</p>
+                <p class="venue-info__name">Villa Laureana</p>
+                <p class="venue-info__address">San Sebastián de los Reyes, Madrid</p>
               </div>
             </a>
           </div>
-        </div>
-
-        <div class="story-section__art">
-          <img src="/images/foto inicio.jpeg" alt="Ilustracion en acuarela de la Iglesia de San Jeronimo el Real">
         </div>
       </section>
 
@@ -153,7 +178,7 @@
             <div class="timeline__marker"></div>
             <div class="timeline__content timeline__content--simple">
               <div class="timeline__time">17:00</div>
-              <div class="timeline__emoji" aria-hidden="true">🙏</div>
+              <div class="timeline__emoji" aria-hidden="true">✝️</div>
               <div>
                 <h3>Ceremonia religiosa</h3>
               </div>
@@ -197,21 +222,13 @@
 
       <section class="section dress-section reveal reveal--up" id="codigo-vestimenta">
         <div class="dress-section__copy">
-          <p class="section-tag">Codigo de vestimenta</p>
-          <h2 class="section-title">Elegancia en tonos suaves</h2>
-          <p>Nos encantara veros con un estilo elegante y cuidado. Recomendamos trajes claros o medios, vestidos fluidos
-            y tejidos con movimiento para acompanar el ambiente de la celebracion.</p>
+          <p class="section-tag">Código de vestimenta</p>
+          <h2 class="section-title">Sugerencias</h2>
           <ul class="rules-list">
             <li>Estilo formal o coctel elegante para todo el dia.</li>
-            <li>Mejor evitar blanco, marfil y tonos muy cercanos al vestido de novia.</li>
-            <li><strong>Esta prohibido llevar el color naranja.</strong></li>
+            <li>Mejor evitar blanco, marfil, naranja y tonos muy cercanos al vestido de novia.</li>
             <li>Zapatos comodos para poder disfrutar de la fiesta hasta el final.</li>
           </ul>
-        </div>
-
-        <div class="dress-section__placeholder" aria-label="Imagen del codigo de vestimenta pendiente">
-          <p class="dress-section__placeholder-tag">Referencia visual</p>
-          <p class="dress-section__placeholder-text">Cuando me pases la nueva foto la coloco aqui.</p>
         </div>
       </section>
 
@@ -221,7 +238,6 @@
           <h2 class="section-title">Necesitas alojamiento para la boda?</h2>
           <form class="lodging-form" id="lodgingForm" novalidate>
             <fieldset class="choice-group choice-group--compact">
-              <legend>Quieres recibir un codigo provisional de descuento? *</legend>
               <div class="choice-grid choice-grid--2">
                 <label class="choice-card">
                   <input type="radio" name="lodgingNeeded" value="si">
@@ -235,10 +251,9 @@
             </fieldset>
 
             <div class="lodging-code hidden" id="lodgingCodePanel">
-              <p class="lodging-code__label">Codigo provisional</p>
-              <p class="lodging-code__value" id="lodgingCodeValue">HOTEL-DS27</p>
-              <p class="lodging-code__note">Lo usaremos como referencia temporal hasta cerrar el acuerdo definitivo con
-                el hotel.</p>
+              <p class="lodging-code__label">Información de alojamiento</p>
+              <p class="lodging-code__note">Mas adelante nos pondremos en contacto contigo para compartir la información
+                del hotel y el descuento disponible para los invitados.</p>
             </div>
           </form>
         </div>
@@ -247,7 +262,7 @@
       <section class="section reveal reveal--up" id="confirmar">
         <div class="rsvp-card">
           <p class="section-tag">Confirmar asistencia</p>
-          <h2 class="section-title">Nos hara muchisima ilusion contar contigo</h2>
+          <h2 class="section-title">Nos encantaría que nos acompañaras en este dia tan especial</h2>
 
           <form class="rsvp-form" id="rsvpForm" novalidate>
             <div class="form-field">
@@ -257,7 +272,7 @@
             </div>
 
             <fieldset class="choice-group">
-              <legend>Confirmacion de asistencia *</legend>
+              <legend>Confirmación de asistencia *</legend>
               <div class="choice-grid choice-grid--2">
                 <label class="choice-card">
                   <input type="radio" name="attendance" value="si">
@@ -270,14 +285,28 @@
               </div>
             </fieldset>
 
-            <div class="form-field is-collapsed" id="dietaryGroup">
-              <label for="dietaryNotes">Restricciones alimentarias o alergias</label>
+            <fieldset class="choice-group is-collapsed" id="dietaryGroup">
+              <legend>¿Tienes alergias o restricciones alimentarias? *</legend>
+              <div class="choice-grid choice-grid--2">
+                <label class="choice-card">
+                  <input type="radio" name="dietaryNeeds" value="si">
+                  <span>Si</span>
+                </label>
+                <label class="choice-card">
+                  <input type="radio" name="dietaryNeeds" value="no">
+                  <span>No</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="form-field is-collapsed" id="dietaryNotesGroup">
+              <label for="dietaryNotes">Cuéntanos cuáles son tus alergias o restricciones *</label>
               <textarea id="dietaryNotes" name="dietaryNotes" rows="3" maxlength="300"
-                placeholder="Cuentanos si hay algo que debamos tener en cuenta"></textarea>
+                placeholder="Escribe aquí tus alergias o restricciones"></textarea>
             </div>
 
             <fieldset class="choice-group is-collapsed" id="plusOneGroup">
-              <legend>Tienes acompanante? *</legend>
+              <legend>¿Vienes acompañado? *</legend>
               <div class="choice-grid choice-grid--2">
                 <label class="choice-card">
                   <input type="radio" name="plusOne" value="si">
@@ -291,24 +320,29 @@
             </fieldset>
 
             <div class="form-field is-collapsed" id="plusOneCountGroup">
-              <label for="plusOneCount">Cuantos acompanantes vienen contigo? *</label>
+              <label for="plusOneCount">Cuántos acompañantes vienen contigo? *</label>
               <select id="plusOneCount" name="plusOneCount">
                 <option value="">Selecciona una cantidad</option>
-                <option value="1">1 acompanante</option>
-                <option value="2">2 acompanantes</option>
-                <option value="3">3 acompanantes</option>
-                <option value="4">4 acompanantes</option>
-                <option value="5">5 acompanantes</option>
-                <option value="6">6 acompanantes</option>
-                <option value="7">7 acompanantes</option>
-                <option value="8">8 acompanantes</option>
-                <option value="9">9 acompanantes</option>
-                <option value="10">10 acompanantes</option>
+                <option value="1">1 acompañante</option>
+                <option value="2">2 acompañantes</option>
+                <option value="3">3 acompañantes</option>
+                <option value="4">4 acompañantes</option>
+                <option value="5">5 acompañantes</option>
+                <option value="6">6 acompañantes</option>
+                <option value="7">7 acompañantes</option>
+                <option value="8">8 acompañantes</option>
+                <option value="9">9 acompañantes</option>
+                <option value="10">10 acompañantes</option>
               </select>
             </div>
 
+            <div class="conditional-panel is-collapsed" id="plusOneDetailsGroup">
+              <p class="conditional-panel__title">Información de los acompañantes</p>
+              <div class="dynamic-list" id="plusOneDetailsFields"></div>
+            </div>
+
             <fieldset class="choice-group is-collapsed" id="childrenGroup">
-              <legend>Asistiran ninos menores de 12 anos? *</legend>
+              <legend>Asistirán niños menores de 12 años? *</legend>
               <div class="choice-grid choice-grid--2">
                 <label class="choice-card">
                   <input type="radio" name="children" value="si">
@@ -322,15 +356,20 @@
             </fieldset>
 
             <div class="form-field is-collapsed" id="childrenCountGroup">
-              <label for="childrenCount">Cuantos ninos menores de 12 anos asistiran? *</label>
+              <label for="childrenCount">Cuántos niños menores de 12 años asistirán? *</label>
               <select id="childrenCount" name="childrenCount">
                 <option value="">Selecciona una cantidad</option>
-                <option value="1">1 nino</option>
-                <option value="2">2 ninos</option>
-                <option value="3">3 ninos</option>
-                <option value="4">4 ninos</option>
-                <option value="5">5 ninos</option>
+                <option value="1">1 niño</option>
+                <option value="2">2 niños</option>
+                <option value="3">3 niños</option>
+                <option value="4">4 niños</option>
+                <option value="5">5 niños</option>
               </select>
+            </div>
+
+            <div class="conditional-panel is-collapsed" id="childrenDetailsGroup">
+              <p class="conditional-panel__title">Información de los niños</p>
+              <div class="dynamic-list" id="childrenDetailsFields"></div>
             </div>
 
             <fieldset class="choice-group is-collapsed" id="shuttleGroup">
@@ -369,14 +408,14 @@
         <div class="card card--sage final-card">
           <p class="section-tag">Save the date</p>
           <h2 class="section-title">12 de junio de 2027</h2>
-          <button class="button button--secondary" id="calendarBtn" type="button">Anadir al calendario</button>
+          <button class="button button--secondary" id="calendarBtn" type="button">Añadir al calendario</button>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <img src="/images/logo.jpeg" alt="Logo Diego y Silvia" class="site-footer__logo">
-      <p>Diego & Silvia · Madrid · 2027</p>
+      <img src="/images/logo.png" alt="Logo Diego y Silvia" class="site-footer__logo">
+      <p>Diego & Silvia · 2027</p>
     </footer>
   </div>
 

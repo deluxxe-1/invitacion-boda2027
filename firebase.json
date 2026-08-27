@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "invitacion-boda-diego-y-silvia",
     "public": ".",
     "ignore": [
       "firebase.json",

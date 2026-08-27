@@ -20,6 +20,75 @@ service cloud.firestore {
         ];
     }
 
+    function isValidCompanionDetail(detail) {
+      return detail is map &&
+        detail.keys().hasOnly([
+          'name',
+          'dietaryNotes'
+        ]) &&
+        detail.keys().hasAll([
+          'name',
+          'dietaryNotes'
+        ]) &&
+        detail.name is string &&
+        detail.name.size() >= 1 &&
+        detail.name.size() <= 100 &&
+        detail.dietaryNotes is string &&
+        detail.dietaryNotes.size() <= 300;
+    }
+
+    function isValidChildDetail(detail) {
+      return detail is map &&
+        detail.keys().hasOnly([
+          'name',
+          'dietaryNotes',
+          'needsHighChair',
+          'needsStroller'
+        ]) &&
+        detail.keys().hasAll([
+          'name',
+          'dietaryNotes',
+          'needsHighChair',
+          'needsStroller'
+        ]) &&
+        detail.name is string &&
+        detail.name.size() >= 1 &&
+        detail.name.size() <= 100 &&
+        detail.dietaryNotes is string &&
+        detail.dietaryNotes.size() <= 300 &&
+        detail.needsHighChair is bool &&
+        detail.needsStroller is bool;
+    }
+
+    function isValidCompanionDetails(details, count) {
+      return details is list &&
+        details.size() == count &&
+        count >= 0 &&
+        count <= 10 &&
+        (count < 1 || isValidCompanionDetail(details[0])) &&
+        (count < 2 || isValidCompanionDetail(details[1])) &&
+        (count < 3 || isValidCompanionDetail(details[2])) &&
+        (count < 4 || isValidCompanionDetail(details[3])) &&
+        (count < 5 || isValidCompanionDetail(details[4])) &&
+        (count < 6 || isValidCompanionDetail(details[5])) &&
+        (count < 7 || isValidCompanionDetail(details[6])) &&
+        (count < 8 || isValidCompanionDetail(details[7])) &&
+        (count < 9 || isValidCompanionDetail(details[8])) &&
+        (count < 10 || isValidCompanionDetail(details[9]));
+    }
+
+    function isValidChildDetails(details, count) {
+      return details is list &&
+        details.size() == count &&
+        count >= 0 &&
+        count <= 5 &&
+        (count < 1 || isValidChildDetail(details[0])) &&
+        (count < 2 || isValidChildDetail(details[1])) &&
+        (count < 3 || isValidChildDetail(details[2])) &&
+        (count < 4 || isValidChildDetail(details[3])) &&
+        (count < 5 || isValidChildDetail(details[4]));
+    }
+
     function isValidRsvp(data) {
       return data.keys().hasOnly([
           'name',
@@ -27,8 +96,14 @@ service cloud.firestore {
           'dietaryNotes',
           'plusOne',
           'plusOneCount',
+          'plusOneDetails',
           'bringingChildrenUnder12',
           'childrenCount',
+          'childrenDetails',
+            'childrenNeedHighChair',
+            'childrenHighChairCount',
+            'childrenNeedStroller',
+            'childrenStrollerCount',
           'shuttleRoutes',
           'createdAt'
         ]) &&
@@ -37,8 +112,14 @@ service cloud.firestore {
           'attendanceConfirmed',
           'plusOne',
           'plusOneCount',
+          'plusOneDetails',
           'bringingChildrenUnder12',
           'childrenCount',
+          'childrenDetails',
+          'childrenNeedHighChair',
+          'childrenHighChairCount',
+          'childrenNeedStroller',
+          'childrenStrollerCount',
           'shuttleRoutes',
           'createdAt'
         ]) &&
@@ -50,11 +131,21 @@ service cloud.firestore {
         data.plusOne is bool &&
         data.plusOneCount is int &&
         data.plusOneCount >= 0 &&
-        data.plusOneCount <= 5 &&
+        data.plusOneCount <= 10 &&
+        isValidCompanionDetails(data.plusOneDetails, data.plusOneCount) &&
         data.bringingChildrenUnder12 is bool &&
         data.childrenCount is int &&
         data.childrenCount >= 0 &&
-        data.childrenCount <= 8 &&
+        data.childrenCount <= 5 &&
+        isValidChildDetails(data.childrenDetails, data.childrenCount) &&
+        data.childrenNeedHighChair is bool &&
+        data.childrenHighChairCount is int &&
+        data.childrenHighChairCount >= 0 &&
+        data.childrenHighChairCount <= data.childrenCount &&
+        data.childrenNeedStroller is bool &&
+        data.childrenStrollerCount is int &&
+        data.childrenStrollerCount >= 0 &&
+        data.childrenStrollerCount <= data.childrenCount &&
         data.shuttleRoutes is list &&
         isValidRoutes(data.shuttleRoutes) &&
         (
@@ -62,8 +153,37 @@ service cloud.firestore {
           data.plusOneCount == 0
         ) &&
         (
+          data.plusOne ?
+            data.plusOneCount > 0 :
+            data.plusOneCount == 0
+        ) &&
+        (
           data.bringingChildrenUnder12 ||
           data.childrenCount == 0
+        ) &&
+        (
+          data.bringingChildrenUnder12 ?
+            data.childrenCount > 0 :
+            data.childrenCount == 0
+        ) &&
+        data.childrenNeedHighChair == (data.childrenHighChairCount > 0) &&
+        data.childrenNeedStroller == (data.childrenStrollerCount > 0) &&
+        (
+          data.childrenNeedHighChair ||
+          data.childrenHighChairCount == 0
+        ) &&
+        (
+          data.childrenNeedStroller ||
+          data.childrenStrollerCount == 0
+        ) &&
+        (
+          data.bringingChildrenUnder12 ||
+          (
+            !data.childrenNeedHighChair &&
+            data.childrenHighChairCount == 0 &&
+            !data.childrenNeedStroller &&
+            data.childrenStrollerCount == 0
+          )
         ) &&
         (
           data.attendanceConfirmed ||
@@ -72,6 +192,10 @@ service cloud.firestore {
             data.plusOneCount == 0 &&
             !data.bringingChildrenUnder12 &&
             data.childrenCount == 0 &&
+            !data.childrenNeedHighChair &&
+            data.childrenHighChairCount == 0 &&
+            !data.childrenNeedStroller &&
+            data.childrenStrollerCount == 0 &&
             data.shuttleRoutes == []
           )
         ) &&

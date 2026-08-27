@@ -11,13 +11,12 @@
  */
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyAvwrCpTKTwXoDl2VkjzYX6vtcs_PWKQU4",
-  authDomain: "boda-2027.firebaseapp.com",
-  projectId: "boda-2027",
-  storageBucket: "boda-2027.firebasestorage.app",
-  messagingSenderId: "2745893545",
-  appId: "1:2745893545:web:8f7d62bddc4b0defa4dfb8",
-  measurementId: "G-DCMYNQGMQ7",
+  apiKey: "AIzaSyDmx3cpm7Eig0GzgbeTnu0I8XZpsybXfwo",
+  authDomain: "invitacion-a-la-boda.firebaseapp.com",
+  projectId: "invitacion-a-la-boda",
+  storageBucket: "invitacion-a-la-boda.firebasestorage.app",
+  messagingSenderId: "821765458876",
+  appId: "1:821765458876:web:a2e2aeef0cddd69c2379b9",
 };
 
 export const isFirebaseConfigured = () =>
