@@ -518,8 +518,9 @@ body.photo-intro-active .floating-nav {
 
 .photo-intro-screen img {
   object-fit: cover;
-  object-position: center;
+  object-position: 30%;
   display: block;
+  opacity: 0.84;
 }
 
 .photo-intro-screen__overlay {
@@ -530,15 +531,15 @@ body.photo-intro-active .floating-nav {
 }
 
 .photo-intro-screen__headline,
-.photo-intro-screen__names {
+.photo-intro-screen__names,
+.photo-intro-screen__date {
   position: absolute;
   left: 50%;
   width: min(88vw, 760px);
   margin: 0;
   transform: translateX(-50%);
   text-align: center;
-  color: #5f5141;
-  font-family: var(--font-script);
+  color: #545454;
   font-weight: 400;
   line-height: 0.92;
   text-wrap: balance;
@@ -546,13 +547,25 @@ body.photo-intro-active .floating-nav {
 }
 
 .photo-intro-screen__headline {
-  top: max(44px, 7svh);
-  font-size: clamp(4rem, 13vw, 7rem);
+  top: max(60px, 9svh);
+  font-family: var(--font-script);
+  font-size: clamp(3.4rem, 11.5vw, 6rem);
 }
 
 .photo-intro-screen__names {
-  top: 28%;
-  font-size: clamp(4.6rem, 14.5vw, 7.8rem);
+  top: 21%;
+  font-family: var(--font-script);
+  font-size: clamp(4.8rem, 15vw, 8.1rem);
+}
+
+.photo-intro-screen__date {
+  bottom: max(72px, 8svh);
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 4.8vw, 2.65rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
 }
 
 .card--sage {
@@ -620,13 +633,11 @@ body.photo-intro-active .floating-nav {
   line-height: 1.8;
 }
 
-.story-section__dropcap {
-  float: left;
-  margin: 8px 10px 0 0;
+.story-section__lead {
   font-family: var(--font-serif);
-  font-size: 3.6rem;
-  line-height: 0.8;
-  color: var(--sage-deep);
+  font-size: 1.14rem;
+  font-weight: 400;
+  line-height: 1.72;
 }
 
 .venue-list {
@@ -1374,13 +1385,8 @@ body.photo-intro-active .floating-nav {
     height: 100svh;
   }
 
-  .story-section__dropcap {
-    margin-right: 8px;
-    font-size: 2.8rem;
-  }
-
   .story-section__lead {
-    font-size: 0.92rem;
+    font-size: 1.02rem;
     line-height: 1.7;
   }
 
@@ -1612,10 +1618,6 @@ body.photo-intro-active .floating-nav {
 
   .venue-info__name {
     font-size: 0.92rem;
-  }
-
-  .story-section__dropcap {
-    font-size: 2.4rem;
   }
 
   .choice-grid--2 {

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel de administrador de la boda de Diego y Silvia">
+  <meta name="theme-color" content="#EDE5D8">
+  <title>Panel de administrador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/png" href="/images/favicon.png?v=20260728-2">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+  <main class="admin-shell">
+    <section class="admin-card admin-auth" id="loginView">
+      <p class="admin-eyebrow">Acceso privado</p>
+      <h1 class="admin-title">Panel de administrador</h1>
+      <p class="admin-copy">
+        Entra con tu correo y contraseña para ver respuestas, filtrar asistentes y exportar el CSV.
+      </p>
+      <form class="admin-form" id="loginForm" novalidate>
+        <label class="admin-field">
+          <span>Correo electrónico</span>
+          <input id="emailInput" name="email" type="email" autocomplete="email" placeholder="tu@correo.com" required>
+        </label>
+        <label class="admin-field">
+          <span>Contraseña</span>
+          <input id="passwordInput" name="password" type="password" autocomplete="current-password"
+            placeholder="Introduce tu contraseña" required>
+        </label>
+        <button class="admin-button admin-button--primary" id="loginButton" type="submit">Entrar</button>
+      </form>
+      <p class="admin-feedback admin-feedback--error hidden" id="loginError"></p>
+    </section>
+
+    <section class="admin-dashboard hidden" id="dashboardView">
+      <div class="admin-card admin-header">
+        <div>
+          <p class="admin-eyebrow">Administrador</p>
+          <h1 class="admin-title">Respuestas de la invitación</h1>
+          <p class="admin-copy">Consulta la asistencia, acompañantes, niños, alergias y transporte de cada invitado.</p>
+        </div>
+        <div class="admin-header__actions">
+          <p class="admin-session" id="sessionEmail"></p>
+          <button class="admin-button admin-button--ghost" id="refreshButton" type="button">Actualizar</button>
+          <button class="admin-button admin-button--ghost" id="logoutButton" type="button">Cerrar sesión</button>
+        </div>
+      </div>
+
+      <div class="admin-summary" id="summaryGrid">
+        <article class="admin-card admin-stat">
+          <p class="admin-stat__label">Respuestas</p>
+          <p class="admin-stat__value" id="summaryResponses">0</p>
+        </article>
+        <article class="admin-card admin-stat">
+          <p class="admin-stat__label">Asistentes confirmados</p>
+          <p class="admin-stat__value" id="summaryConfirmed">0</p>
+        </article>
+        <article class="admin-card admin-stat">
+          <p class="admin-stat__label">Invitados totales</p>
+          <p class="admin-stat__value" id="summaryGuests">0</p>
+        </article>
+        <article class="admin-card admin-stat">
+          <p class="admin-stat__label">Niños</p>
+          <p class="admin-stat__value" id="summaryChildren">0</p>
+        </article>
+      </div>
+
+      <div class="admin-card admin-toolbar">
+        <div class="admin-toolbar__filters">
+          <label class="admin-field">
+            <span>Buscar por nombre</span>
+            <input id="searchInput" type="search" placeholder="Ej. Marta García">
+          </label>
+          <label class="admin-field">
+            <span>Estado</span>
+            <select id="attendanceFilter">
+              <option value="all">Todos</option>
+              <option value="confirmed">Asiste</option>
+              <option value="declined">No asiste</option>
+            </select>
+          </label>
+        </div>
+        <div class="admin-toolbar__actions">
+          <button class="admin-button admin-button--secondary" id="exportButton" type="button">Exportar CSV</button>
+        </div>
+      </div>
+
+      <p class="admin-feedback admin-feedback--error hidden" id="dashboardError"></p>
+      <p class="admin-status" id="statusText">Cargando respuestas...</p>
+
+      <div class="admin-card admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Invitado</th>
+              <th>Asistencia</th>
+              <th>Acompañantes</th>
+              <th>Niños</th>
+              <th>Alergias</th>
+              <th>Bus</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="responsesBody"></tbody>
+        </table>
+        <div class="admin-empty hidden" id="emptyState">
+          <h2>Sin resultados</h2>
+          <p>No hay respuestas que coincidan con los filtros actuales.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/js/admin.js"></script>
+</body>
+
+</html>

@@ -234,7 +234,7 @@ async function playTransitionVideo() {
     heroTransitionVideo.currentTime = 0;
     await heroTransitionVideo.play();
   } catch (error) {
-    console.error("No se ha podido reproducir el video de transicion:", error);
+    console.error("No se ha podido reproducir el vídeo de transición:", error);
     revealInvitationAfterTransition();
   }
 }
@@ -244,7 +244,7 @@ function openInvitationAfterVideo() {
   heroIntroFinished = true;
   heroIntroVideo?.pause();
   startMusic().catch((error) => {
-    console.error("No se ha podido iniciar la musica automaticamente:", error);
+    console.error("No se ha podido iniciar la música automáticamente:", error);
   });
   playTransitionVideo();
 }
@@ -259,7 +259,7 @@ function prepareHeroIntroPreview() {
   try {
     heroIntroVideo.currentTime = previewTime;
   } catch (error) {
-    console.error("No se ha podido preparar la vista previa del video:", error);
+    console.error("No se ha podido preparar la vista previa del vídeo:", error);
   }
 
   heroIntroVideo.load();
@@ -281,7 +281,7 @@ async function playHeroIntro() {
     heroIntroPlayed = false;
     heroIntroTrigger?.classList.remove("is-playing");
     scrollHint?.classList.remove("hidden");
-    console.error("No se ha podido reproducir el video de inicio:", error);
+    console.error("No se ha podido reproducir el vídeo de inicio:", error);
   }
 }
 
@@ -847,15 +847,15 @@ async function primeWeddingSong() {
     weddingSongPrimed = true;
   } catch (error) {
     weddingSong.volume = 0.6;
-    console.error("No se ha podido preparar la musica:", error);
+    console.error("No se ha podido preparar la música:", error);
   }
 }
 
 function stopMusic() {
   weddingSong.pause();
   musicEnabled = false;
-  musicToggle.querySelector(".floating-ui__label").textContent = "Musica";
-  musicToggle.setAttribute("aria-label", "Activar musica");
+  musicToggle.querySelector(".floating-ui__label").textContent = "Música";
+  musicToggle.setAttribute("aria-label", "Activar música");
 }
 
 async function startMusic() {
@@ -865,7 +865,7 @@ async function startMusic() {
   await weddingSong.play();
   musicEnabled = true;
   musicToggle.querySelector(".floating-ui__label").textContent = "Silenciar";
-  musicToggle.setAttribute("aria-label", "Silenciar musica");
+  musicToggle.setAttribute("aria-label", "Silenciar música");
 }
 
 function handleMusicToggle() {
