@@ -46,6 +46,8 @@ const childrenDetailsGroup = document.getElementById("childrenDetailsGroup");
 const childrenDetailsFields = document.getElementById("childrenDetailsFields");
 const shuttleGroup = document.getElementById("shuttleGroup");
 const weddingSong = new Audio("/music/wedding-song.mp3");
+const HERO_INTRO_FALLBACK_MS = 5200;
+const HERO_TRANSITION_FALLBACK_MS = 2200;
 
 let db = null;
 const collapsibleTimers = new WeakMap();
@@ -53,6 +55,8 @@ let heroIntroPlayed = false;
 let heroIntroFinished = false;
 let heroIntroPreviewPrepared = false;
 let heroTransitionCompleted = false;
+let heroIntroFallbackTimer = null;
+let heroTransitionFallbackTimer = null;
 
 if (heroScene) {
   document.body.classList.add("intro-pending");
@@ -61,6 +65,71 @@ if (heroScene) {
 if (isFirebaseConfigured()) {
   const app = initializeApp(firebaseConfig);
   db = getFirestore(app);
+}
+
+function isIOSDevice() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function setHeroIntroSource(source) {
+  if (!heroIntroVideo || !source) return;
+  if (heroIntroVideo.getAttribute("src") === source) return;
+
+  heroIntroVideo.setAttribute("src", source);
+  heroIntroVideo.load();
+}
+
+function useDefaultHeroIntroSource() {
+  const defaultSource = heroIntroVideo?.dataset.defaultSrc;
+  if (!defaultSource) return;
+  setHeroIntroSource(defaultSource);
+}
+
+function configureHeroIntroSource() {
+  if (!heroIntroVideo) return;
+
+  const iosSource = heroIntroVideo.dataset.iosSrc;
+  if (isIOSDevice() && iosSource) {
+    setHeroIntroSource(iosSource);
+    return;
+  }
+
+  useDefaultHeroIntroSource();
+}
+
+function clearHeroIntroFallback() {
+  if (heroIntroFallbackTimer) {
+    window.clearTimeout(heroIntroFallbackTimer);
+    heroIntroFallbackTimer = null;
+  }
+}
+
+function scheduleHeroIntroFallback() {
+  clearHeroIntroFallback();
+  heroIntroFallbackTimer = window.setTimeout(() => {
+    if (!heroIntroFinished) {
+      console.warn("Fallback de la intro activado: se abre la invitación sin esperar al vídeo.");
+      openInvitationAfterVideo();
+    }
+  }, HERO_INTRO_FALLBACK_MS);
+}
+
+function clearHeroTransitionFallback() {
+  if (heroTransitionFallbackTimer) {
+    window.clearTimeout(heroTransitionFallbackTimer);
+    heroTransitionFallbackTimer = null;
+  }
+}
+
+function scheduleHeroTransitionFallback() {
+  clearHeroTransitionFallback();
+  heroTransitionFallbackTimer = window.setTimeout(() => {
+    if (!heroTransitionCompleted) {
+      console.warn("Fallback de transición activado: se muestra la invitación.");
+      revealInvitationAfterTransition();
+    }
+  }, HERO_TRANSITION_FALLBACK_MS);
 }
 
 function getRadioValue(name) {
@@ -190,6 +259,7 @@ function setCollapsibleState(element, shouldShow) {
 function revealInvitationAfterTransition() {
   if (heroTransitionCompleted) return;
   heroTransitionCompleted = true;
+  clearHeroTransitionFallback();
 
   heroTransitionVideo?.pause();
   heroScene?.classList.add("is-hidden");
@@ -221,6 +291,7 @@ async function playTransitionVideo() {
     return;
   }
 
+  scheduleHeroTransitionFallback();
   heroTransitionVideo.classList.add("is-active");
 
   const finishTransition = () => {
@@ -242,6 +313,7 @@ async function playTransitionVideo() {
 function openInvitationAfterVideo() {
   if (heroIntroFinished) return;
   heroIntroFinished = true;
+  clearHeroIntroFallback();
   heroIntroVideo?.pause();
   startMusic().catch((error) => {
     console.error("No se ha podido iniciar la música automáticamente:", error);
@@ -271,6 +343,7 @@ async function playHeroIntro() {
   heroIntroPlayed = true;
   heroIntroTrigger?.classList.add("is-playing");
   scrollHint?.classList.add("hidden");
+  scheduleHeroIntroFallback();
 
   try {
     await primeWeddingSong();
@@ -278,10 +351,8 @@ async function playHeroIntro() {
     heroIntroVideo.pause();
     await heroIntroVideo.play();
   } catch (error) {
-    heroIntroPlayed = false;
-    heroIntroTrigger?.classList.remove("is-playing");
-    scrollHint?.classList.remove("hidden");
     console.error("No se ha podido reproducir el vídeo de inicio:", error);
+    openInvitationAfterVideo();
   }
 }
 
@@ -763,6 +834,8 @@ async function handleRsvpSubmit(event) {
 
   const childrenHighChairCount = normalizedChildrenDetails.filter((detail) => detail.needsHighChair).length;
   const childrenStrollerCount = normalizedChildrenDetails.filter((detail) => detail.needsStroller).length;
+  const lodgingNeeded =
+    lodgingForm?.querySelector('input[name="lodgingNeeded"]:checked')?.value === "si";
 
   if (!isFirebaseConfigured() || !db) {
     showError("Firebase no esta configurado correctamente.");
@@ -786,6 +859,7 @@ async function handleRsvpSubmit(event) {
     childrenHighChairCount,
     childrenNeedStroller: childrenStrollerCount > 0,
     childrenStrollerCount,
+    lodgingNeeded,
     shuttleRoutes: attends ? shuttleRoutes : [],
     createdAt: serverTimestamp(),
   };
@@ -884,7 +958,20 @@ function scrollByViewport(direction) {
 }
 
 function setupInteractions() {
+  configureHeroIntroSource();
   heroIntroVideo?.addEventListener("loadeddata", prepareHeroIntroPreview, { once: true });
+  heroIntroVideo?.addEventListener("error", () => {
+    const defaultSource = heroIntroVideo?.dataset.defaultSrc;
+    const currentSource = heroIntroVideo?.currentSrc ?? heroIntroVideo?.getAttribute("src") ?? "";
+
+    if (defaultSource && !currentSource.includes("video%20sobre%20verde%20android.mp4")) {
+      console.warn("La versión iPhone del vídeo no se ha podido cargar. Se usa la copia Android.");
+      useDefaultHeroIntroSource();
+      return;
+    }
+
+    openInvitationAfterVideo();
+  });
   heroIntroTrigger?.addEventListener("click", playHeroIntro);
   heroIntroVideo?.addEventListener("timeupdate", () => {
     if (
@@ -895,6 +982,7 @@ function setupInteractions() {
     }
   });
   heroIntroVideo?.addEventListener("ended", openInvitationAfterVideo);
+  heroTransitionVideo?.addEventListener("error", revealInvitationAfterTransition);
   scrollHint?.addEventListener("click", playHeroIntro);
   navUp?.addEventListener("click", () => scrollByViewport(-1));
   navDown?.addEventListener("click", () => scrollByViewport(1));

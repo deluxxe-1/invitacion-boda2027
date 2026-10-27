@@ -101,11 +101,13 @@
             <tr>
               <th>Invitado</th>
               <th>Asistencia</th>
+              <th>Hotel</th>
               <th>Acompañantes</th>
               <th>Niños</th>
               <th>Alergias</th>
               <th>Bus</th>
               <th>Fecha</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody id="responsesBody"></tbody>
@@ -117,6 +119,47 @@
       </div>
     </section>
   </main>
+
+  <div class="admin-modal hidden" id="editModal" aria-hidden="true">
+    <div class="admin-modal__backdrop" id="editModalBackdrop"></div>
+    <section class="admin-modal__dialog admin-card" aria-labelledby="editModalTitle">
+      <div class="admin-modal__header">
+        <div>
+          <p class="admin-eyebrow">Editar invitado</p>
+          <h2 class="admin-title admin-title--sm" id="editModalTitle">Modificar respuesta</h2>
+        </div>
+        <button class="admin-button admin-button--ghost admin-button--compact" id="editCancelTop" type="button">Cerrar</button>
+      </div>
+
+      <form class="admin-form" id="editForm" novalidate>
+        <label class="admin-field">
+          <span>Nombre</span>
+          <input id="editNameInput" name="name" type="text" maxlength="100" required>
+        </label>
+        <label class="admin-field">
+          <span>Asistencia</span>
+          <select id="editAttendanceInput" name="attendanceConfirmed" required>
+            <option value="si">Asiste</option>
+            <option value="no">No asiste</option>
+          </select>
+        </label>
+        <label class="admin-field">
+          <span>Hotel</span>
+          <select id="editLodgingInput" name="lodgingNeeded" required>
+            <option value="si">Sí necesita hotel</option>
+            <option value="no">No necesita hotel</option>
+          </select>
+        </label>
+
+        <p class="admin-feedback admin-feedback--error hidden" id="editError"></p>
+
+        <div class="admin-modal__actions">
+          <button class="admin-button admin-button--ghost" id="editCancelButton" type="button">Cancelar</button>
+          <button class="admin-button admin-button--primary" id="editSaveButton" type="submit">Guardar cambios</button>
+        </div>
+      </form>
+    </section>
+  </div>
 
   <script type="module" src="/js/admin.js"></script>
 </body>

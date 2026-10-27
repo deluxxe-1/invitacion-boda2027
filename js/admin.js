@@ -7,8 +7,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import {
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   getFirestore,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig, isFirebaseConfigured } from "./firebase-config.js";
 
@@ -33,10 +36,21 @@ const summaryResponses = document.getElementById("summaryResponses");
 const summaryConfirmed = document.getElementById("summaryConfirmed");
 const summaryGuests = document.getElementById("summaryGuests");
 const summaryChildren = document.getElementById("summaryChildren");
+const editModal = document.getElementById("editModal");
+const editModalBackdrop = document.getElementById("editModalBackdrop");
+const editForm = document.getElementById("editForm");
+const editNameInput = document.getElementById("editNameInput");
+const editAttendanceInput = document.getElementById("editAttendanceInput");
+const editLodgingInput = document.getElementById("editLodgingInput");
+const editError = document.getElementById("editError");
+const editSaveButton = document.getElementById("editSaveButton");
+const editCancelButton = document.getElementById("editCancelButton");
+const editCancelTop = document.getElementById("editCancelTop");
 
 let auth = null;
 let db = null;
 let allRsvps = [];
+let editingRecordId = null;
 
 if (!isFirebaseConfigured()) {
   showLoginError("La configuración de Firebase no está completa.");
@@ -98,6 +112,11 @@ attendanceFilter?.addEventListener("change", () => {
 exportButton?.addEventListener("click", () => {
   exportCsv(getFilteredRsvps());
 });
+
+editForm?.addEventListener("submit", handleEditSubmit);
+editCancelButton?.addEventListener("click", closeEditModal);
+editCancelTop?.addEventListener("click", closeEditModal);
+editModalBackdrop?.addEventListener("click", closeEditModal);
 
 function setupAuthState() {
   onAuthStateChanged(auth, async (user) => {
@@ -172,6 +191,9 @@ function renderRsvps() {
         </span>
       </td>
       <td>
+        <span class="admin-subtext">${escapeHtml(getLodgingSummary(record))}</span>
+      </td>
+      <td>
         <span class="admin-name">${record.plusOneCount || 0}</span>
         <span class="admin-subtext">${escapeHtml(getCompanionSummary(record))}</span>
       </td>
@@ -188,7 +210,15 @@ function renderRsvps() {
       <td>
         <span class="admin-subtext">${escapeHtml(formatDate(record.createdAt))}</span>
       </td>
+      <td>
+        <div class="admin-actions">
+          <button class="admin-button admin-button--ghost" type="button" data-edit-id="${record.id}">Editar</button>
+          <button class="admin-button admin-button--danger" type="button" data-delete-id="${record.id}">Eliminar</button>
+        </div>
+      </td>
     `;
+    row.querySelector("[data-edit-id]")?.addEventListener("click", () => openEditModal(record));
+    row.querySelector("[data-delete-id]")?.addEventListener("click", () => handleDeleteRecord(record));
     responsesBody.appendChild(row);
   });
 }
@@ -298,6 +328,99 @@ function getRouteSummary(record) {
     .join(", ");
 }
 
+function getLodgingSummary(record) {
+  if (typeof record.lodgingNeeded !== "boolean") {
+    return "No indicado";
+  }
+
+  return record.lodgingNeeded ? "Sí necesita hotel" : "No necesita hotel";
+}
+
+function openEditModal(record) {
+  editingRecordId = record.id;
+  clearEditError();
+  editNameInput.value = record.name || "";
+  editAttendanceInput.value = record.attendanceConfirmed ? "si" : "no";
+  editLodgingInput.value = record.lodgingNeeded ? "si" : "no";
+  editModal.classList.remove("hidden");
+  editModal.setAttribute("aria-hidden", "false");
+}
+
+function closeEditModal() {
+  editingRecordId = null;
+  clearEditError();
+  editForm?.reset();
+  editModal?.classList.add("hidden");
+  editModal?.setAttribute("aria-hidden", "true");
+}
+
+async function handleEditSubmit(event) {
+  event.preventDefault();
+
+  if (!db || !editingRecordId) return;
+
+  const name = editNameInput.value.trim();
+  const attendanceConfirmed = editAttendanceInput.value === "si";
+  const lodgingNeeded = editLodgingInput.value === "si";
+
+  if (!name) {
+    showEditError("Introduce el nombre del invitado.");
+    return;
+  }
+
+  editSaveButton.disabled = true;
+  editSaveButton.textContent = "Guardando...";
+  clearEditError();
+
+  try {
+    const payload = {
+      name,
+      attendanceConfirmed,
+      lodgingNeeded,
+    };
+
+    if (!attendanceConfirmed) {
+      Object.assign(payload, {
+        dietaryNotes: "",
+        plusOne: false,
+        plusOneCount: 0,
+        plusOneDetails: [],
+        bringingChildrenUnder12: false,
+        childrenCount: 0,
+        childrenDetails: [],
+        childrenNeedHighChair: false,
+        childrenHighChairCount: 0,
+        childrenNeedStroller: false,
+        childrenStrollerCount: 0,
+        shuttleRoutes: [],
+      });
+    }
+
+    await updateDoc(doc(db, "rsvps", editingRecordId), payload);
+    closeEditModal();
+    await loadRsvps();
+  } catch (error) {
+    showEditError(getFriendlyDashboardError(error));
+  } finally {
+    editSaveButton.disabled = false;
+    editSaveButton.textContent = "Guardar cambios";
+  }
+}
+
+async function handleDeleteRecord(record) {
+  if (!db || !record?.id) return;
+
+  const confirmed = window.confirm(`¿Seguro que quieres eliminar a ${record.name || "este invitado"}?`);
+  if (!confirmed) return;
+
+  try {
+    await deleteDoc(doc(db, "rsvps", record.id));
+    await loadRsvps();
+  } catch (error) {
+    showDashboardError(getFriendlyDashboardError(error));
+  }
+}
+
 function formatDate(timestamp) {
   const ms = getTimestampMs(timestamp);
   if (!ms) return "Sin fecha";
@@ -322,6 +445,7 @@ function exportCsv(records) {
     "Nombre",
     "Asiste",
     "Invitados totales",
+    "Necesita hotel",
     "Acompañantes",
     "Detalle acompañantes",
     "Niños",
@@ -336,6 +460,7 @@ function exportCsv(records) {
     record.name || "",
     record.attendanceConfirmed ? "Sí" : "No",
     String(getPartySize(record)),
+    getLodgingSummary(record),
     String(record.plusOneCount || 0),
     getCompanionSummary(record),
     String(record.childrenCount || 0),
@@ -402,6 +527,16 @@ function showDashboardError(message) {
 function clearDashboardError() {
   dashboardError.textContent = "";
   dashboardError.classList.add("hidden");
+}
+
+function showEditError(message) {
+  editError.textContent = message;
+  editError.classList.remove("hidden");
+}
+
+function clearEditError() {
+  editError.textContent = "";
+  editError.classList.add("hidden");
 }
 
 function getFriendlyAuthError(error) {

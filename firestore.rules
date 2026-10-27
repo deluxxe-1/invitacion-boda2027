@@ -108,6 +108,7 @@ service cloud.firestore {
             'childrenHighChairCount',
             'childrenNeedStroller',
             'childrenStrollerCount',
+          'lodgingNeeded',
           'shuttleRoutes',
           'createdAt'
         ]) &&
@@ -124,6 +125,7 @@ service cloud.firestore {
           'childrenHighChairCount',
           'childrenNeedStroller',
           'childrenStrollerCount',
+          'lodgingNeeded',
           'shuttleRoutes',
           'createdAt'
         ]) &&
@@ -150,6 +152,7 @@ service cloud.firestore {
         data.childrenStrollerCount is int &&
         data.childrenStrollerCount >= 0 &&
         data.childrenStrollerCount <= data.childrenCount &&
+        data.lodgingNeeded is bool &&
         data.shuttleRoutes is list &&
         isValidRoutes(data.shuttleRoutes) &&
         (
@@ -209,7 +212,8 @@ service cloud.firestore {
     match /rsvps/{rsvpId} {
       allow create: if isValidRsvp(request.resource.data);
       allow read: if isSignedIn();
-      allow update, delete: if false;
+      allow update: if isSignedIn() && isValidRsvp(request.resource.data);
+      allow delete: if isSignedIn();
     }
   }
 }
